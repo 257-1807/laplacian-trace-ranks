@@ -1,0 +1,5 @@
+ℹ [6458/6460] Built TraceRanks (2.1s)
+info: TraceRanks.lean:181:0: 'TraceRanks.stronger' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: TraceRanks.lean:182:0: 'TraceRanks.conjecture_124806' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: TraceRanks.lean:183:0: 'TraceRanks.equality_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (6460 jobs).
