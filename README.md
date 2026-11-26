@@ -6,6 +6,8 @@ $$\operatorname{tr}(L)\le r^{\operatorname{rank}(L)}.$$
 
 **原式取等的图恰为 $K_2$、$P_3$ 和 $C_4$。** 项目同时证明了更强的界 $\operatorname{tr}(L)\le r\,2^{n-2}$。原式、加强式和等号分类均已通过 Lean 4 内核核验。
 
+[证明](#数学证明) · [Lean 主文件](TraceRanks.lean) · [查重与先例](audit/search.md)
+
 ## 原始陈述与查重
 
 Elie Duhamel 与 Tristan Cazenave 在 *Spectral Graph Theory Conjecture Generation*（2026）发布了生成语料。Tristan Cazenave 的 *Lemmas and Conjectures in Spectral Graph Theory*（2026，arXiv:2611.03879v1）第 1 节规定图的类别，第 8 节链接带状态的索引。补充文件 `index_conjectures.csv` 中编号 124806 的逐字陈述如下。[生成论文](https://www.lamsade.dauphine.fr/~cazenave/papers/SpectralGraphTheoryConjectureGeneration.pdf) · [后续原文](https://arxiv.org/html/2611.03879v1#S8) · [补充索引](https://www.lamsade.dauphine.fr/~cazenave/papers/preuves_spectrales.zip)
@@ -15,6 +17,8 @@ Elie Duhamel 与 Tristan Cazenave 在 *Spectral Graph Theory Conjecture Generati
 2026 年 11 月 25 日核查时，作者档案将这一行标为 `ouverte`，Lean 核验栏为 `non`。本次查阅的记录中未找到对此式的完整既有解答。此前纳入候选的 #105367 已被 Lu–Xu 的已发表定理直接覆盖，予以排除。[逐平台查重与候选表](audit/search.md) · [Lu–Xu 原文](https://www.scienceasia.org/2021.47.n6/scias47_779.pdf)
 
 ## 数学证明
+
+左端数的是每条边的两个端点。右端的指数由连通性确定为 $n-1$，剩下的自由量是邻接秩 $r$。证明分两种规模：大图中指数界已经足够，小图中一个三角形就会使 $r$ 至少为 3。
 
 记 $e=|E(G)|$。由于邻接矩阵的对角线为零，握手引理给出 $\operatorname{tr}(L)=2e$。实图 Laplacian 的核维数等于连通分支数，故本题中 $\operatorname{rank}(L)=n-1$。任取一条边，其两个端点给出邻接矩阵的一个行列式为 $-1$ 的 $2\times2$ 主子矩阵，故 $r\ge2$。同理，若有三角形，其三个顶点给出行列式为 $2$ 的主子矩阵，故 $r\ge3$。因此 $r=2$ 的图没有三角形，Mantel 定理给出 $e\le\lfloor n^2/4\rfloor$。
 
@@ -35,6 +39,8 @@ $$2e\le n(n-1)<2^{n-1}\le r\,2^{n-2}.$$
 
 **刻画等号。** 对 $n\ge6$，上面的严格界排除了取等。对 $2\le n\le5$，若 $r\ge3$，则逐一有 $n(n-1)<3^{n-1}$，也不能取等。余下 $r=2$；当 $n=5$ 时 $2e\le12<16$。在 $n=2,3,4$ 的情形，取等恰要求 $e=\lfloor n^2/4\rfloor$。图无三角形，Turán 定理的等号结论迫使它同构于平衡的完全二部图 $T(n,2)$。反过来，这些图的邻接矩阵只有两种行：一类在第一部为零、第二部为一，另一类相反。两部都非空，秩为 2；边数分别为 $1,2,4$，代入原式即取等。
 
+用三角形 $K_3$ 可以检验等号的归属。其迹为 $6$，邻接秩为 $3$。加强界的右端是 $3\cdot 2=6$，原式的右端却是 $3^2=9$。`TraceRanks.equality_iff` 分类的是原式。
+
 ## 声明忠实性
 
 | 论文符号或断言 | Lean 中的实现 |
@@ -50,9 +56,9 @@ $$2e\le n(n-1)<2^{n-1}\le r\,2^{n-2}.$$
 Lean 与 Mathlib 均锁定为 v4.36.0，Mathlib 提交为 `fc4f59e577feb1a4956671bc04ac18aaaf8cd842`。安装 elan 后，在本目录执行：
 
 ```sh
-lake exe cache get
+lake exe cache get Mathlib.Combinatorics.SimpleGraph.LapMatrix Mathlib.Combinatorics.SimpleGraph.Extremal.Turan Mathlib.Combinatorics.SimpleGraph.DegreeSum Mathlib.LinearAlgebra.Matrix.Rank Mathlib.Tactic
 lake build
-lake env lean TraceRanks.lean
+lake env lean -DwarningAsError=true TraceRanks.lean
 lake env leanchecker TraceRanks
 python3 scripts/enumerate.py
 ```

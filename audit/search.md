@@ -26,3 +26,11 @@
 | Lean Zulip 与 Mathlib | Zulip 所有网络公开频道检索 `g124806`、`124806`、`2611.03879`，均无匹配；私有频道不在检索范围。Mathlib 的 SimpleGraph 源码和文献表检查编号及迹–秩–秩形状，没有检出本定理。Mathlib 已含 Turán 定理、子矩阵秩单调性与 Laplacian 核维数公式，本项目使用这些既有引理。[Zulip 查询](https://leanprover.zulipchat.com/#narrow/channels/web-public/search/g124806) · [Mathlib 秩引理](https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/LinearAlgebra/Matrix/Rank.lean) · [Turán 定理](https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/Combinatorics/SimpleGraph/Extremal/Turan.lean) |
 
 该搜索支持“作者状态表中开放，所核查的公开来源中未找到此前直接证明”的表述。结论是现有图论和线性代数的初等推论。没有数据库能排除未经索引、使用其他表述或未公开的证明。
+
+## 独立复核
+
+2026-11-25 重新下载两份作者归档。原始文件第 6,541 行和后续状态索引都保留了同一底数与指数。将二者交换的 #124988 已被作者的图数据库反驳。重新检索索引共得到上文所列的 7 个相关条目，3,673 份 Lean 源文件中均未找到定理名 `g124806`。[原始前缀公式](https://www.lamsade.dauphine.fr/~cazenave/papers/Conjectures.zip) · [状态索引与代码](https://www.lamsade.dauphine.fr/~cazenave/papers/preuves_spectrales.zip)
+
+邻接秩为 2 的连通图一定是完全二部图，这个结构结论已有独立证明，见 Vatandoost 与 Nozari（2018）Theorem 1.6 的证明。这里的 Lean 论证用三角形的秩与 Turán 极值等号定理得到所需分类。`equality_iff` 刻画的是目录原式的等号。三角形可以区分两个界，它满足加强式的等号 $6=3\cdot2$，而在原式中 $6<3^2$。[秩为 2 的结构结论](https://doi.org/10.1080/23311835.2018.1437668) · [形式化](../TraceRanks.lean)
+
+本次从远端克隆重新执行了两个矩阵的整数消元、`lake build`、源文件公理打印和 `leanchecker`。原式在 2 至 6 阶连通标号图上的等号数依次为 1、3、3、0、0，三个受审计声明的公理均限于 `propext`、`Classical.choice`、`Quot.sound`。[枚举程序](../scripts/enumerate.py) · [公理输出](axioms.log)
